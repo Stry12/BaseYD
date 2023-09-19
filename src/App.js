@@ -7,7 +7,8 @@ import value from './const/conts.js';
 import url from 'url';
 
 //archivo de la confiraciaona de bd 
-import './database/connection.js'
+import '../src/database/connection-v2-sequelize.js'
+import '../src/database/connection-v3-mongodb.js'
 
 const App = express(); //crear instancia app
 

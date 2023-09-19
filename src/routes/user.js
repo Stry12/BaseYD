@@ -6,5 +6,4 @@ const router = Router();
 //Jorge
 router.post("/registro",userMethods.registro);
 
-
 export default router;

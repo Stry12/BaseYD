@@ -74,10 +74,30 @@ const addLibro = async (req, res) => {
     }
 }
 
+const getLibrosIsbn = async (req, res) => {
+    try {
+        const connection = await createConnection();
+        //const [rows] = await connection.promise().query('SELECT * FROM libros');
+        const [rows] = await connection.promise().query('SELECT libros.ISBN,libros.Titulo,libros.Autor FROM `libros`');
+
+        connection.end();
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron libros' });
+        }
+        return res.status(200).json({ message: 'Libros encontrados', libros: rows });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+
+
 
 export const methods = {
     getLibrosTitulo,
     addLibro,
     getLibros,
-    getLibroID
+    getLibroID,
+    getLibrosIsbn
 };

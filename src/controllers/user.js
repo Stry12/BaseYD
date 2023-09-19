@@ -10,9 +10,7 @@ const registro= async (req,res) => {
         const {id,nombre,correo} = req.body;
 
         const connection = await createConnection();
-        //const [rows] = await connection.promise().query('SELECT * FROM libros');
         const [rows] = await connection.promise().query('INSERT INTO usuarios (UserIdentification,NombreDeUsuario,CorreoElectronico) VALUES (?, ?, ?)', [id,nombre,correo]);
-
         connection.end();
 
         console.log(result);
