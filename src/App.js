@@ -1,35 +1,52 @@
+/* The code you provided is setting up an Express.js server with various middleware and configurations. */
 import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 import express from 'express';
-import { NODE_ENV, RUN_PORT, STATIC_PATH } from './const/conts.js';
-
-const App = express();
-
-const corsOptions = {
-    credentials: true,
-    optionSuccessStatus: 200,
-    methods: "GET, PUT, POST, DELETE",
-    origin: '*'
-}
-
-// Archivo de configuración bd
+import value from './const/conts.js';
+//archivo de la confiraciaona de bd 
 import './database/connection.js'
 
-App.set('env', NODE_ENV)
-App.set('port', RUN_PORT)
+const App = express(); //crear instancia app
 
+/* The `corsOptions` object is a configuration object for the CORS (Cross-Origin Resource Sharing)
+middleware. CORS is a mechanism that allows resources (e.g., fonts, JavaScript, etc.) on a web page
+to be requested from another domain outside the domain from which the resource originated. */
+const corsOptions = {
+    credentiasl: true,
+    optionSuccessStatus:200,
+    methods: "GET, PUT, POST, DELETE",
+    origin: '*'
+};
+
+
+/* The code `app.set('env', value.NODE_ENV)` is setting the environment variable for the Express.js
+application. The value of `value.NODE_ENV` is being assigned to the `env` setting. This is typically
+used to determine the application's behavior based on the environment it is running in, such as
+development, production, or testing. */
+
+App.set('env', value.NODE_ENV);
+App.set('port', value.RUN_PORT);
+
+/* The code `app.use(morgan('dev'))` is setting up the Morgan middleware, which is a logging middleware
+for Express.js. It logs HTTP requests to the console in a development-friendly format. */
 App.use(morgan('dev'));
 App.use(cors(corsOptions));
-App.use(express.json({ limit: '500MB' }));
-App.use(express.urlencoded({ extended: true }));
+App.use(express.json({limit: '500MB'}));
+App.use(express.urlencoded({extended:true}));
 
-// Static folder
-App.use(express.static(path.join(path.resolve(), STATIC_PATH)));
+//static folder
+App.use(express.static(path.join(path.resolve(), value.STATIC_PATH)));
 
-// ENDPOINTS
+
+//ENDPOINTs
 import routerUser from './routes/user.js';
+import routerLibros from './routes/libros.js';
 
-App.use("/user", routerUser);
+/* `app.use('/user', routerUser)` is setting up a middleware for the Express.js application. It
+specifies that any requests with a URL starting with '/user' should be handled by the `routerUser`
+router. */
+App.use('/user', routerUser);
+App.use('/libros', routerLibros);
 
-export default App;
+export default App

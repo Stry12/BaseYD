@@ -1,33 +1,36 @@
 import mysql2 from 'mysql2';
+import values from '../const/conts.js';
 
+/* The `connectionConfig` object is storing the configuration details for connecting to a MySQL
+database. It includes the following properties: */
 const connectionConfig = {
-    host: 'localhost' ,
-    user:'root',
-    password: '',
-    database: 'marketbook'
+    host: values.HOST,
+    user: 'root',
+    database: values.DATABASE
 };
 
-
+/* The code is creating a connection to a MySQL database using the `mysql2` library. */
 const connection = mysql2.createConnection({
     host: connectionConfig.host,
     user: connectionConfig.user,
     password: connectionConfig.password
-})
+});
 
+/* The code `connection.query(`CREATE DATABASE IF NOT EXISTS ${connectionConfig.database}`, (error) =>
+{ ... })` is executing a SQL query to create a database if it does not already exist. */
 connection.query(`CREATE DATABASE IF NOT EXISTS ${connectionConfig.database}`, (error) => {
     if (error) {
-        console.log("Error al crear la base de datos");
+        console.error('Error al crear la base de datos: ', error);
         return;
     }
 
     console.log('Base de datos creada o ya existente');
 
-    //Conexion a la base e datos
+    // Conectar a la base de datos
     connectionConfig.database = connectionConfig.database;
 
-    //Cerra conexion temporal
+    // Cerrar la conexión temporal
     connection.end();
 });
 
-export default connection;
-
+export default connectionConfig;

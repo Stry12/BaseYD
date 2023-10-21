@@ -8,4 +8,4 @@ router.get("/libros",userMethods.getLibros);
 router.get("/general/:id",userMethods.getGeneral);
 
 
-export default router;0
+export default router;
