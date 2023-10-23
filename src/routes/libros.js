@@ -23,6 +23,7 @@ const router = Router();
 
 router.get("/titulos/:text",librosMethods.getLibrosTitulo);
 router.get("/getlibros",librosMethods.getLibros);
+router.get("/getlibrosid/:id",librosMethods.getLibroID);
 router.post("/subir",fileUpload,librosMethods.addLibro);
 
 export default router;

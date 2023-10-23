@@ -26,7 +26,24 @@ const getLibros = async (req, res) => {
     try {
         const connection = await createConnection();
         //const [rows] = await connection.promise().query('SELECT * FROM libros');
-        const [rows] = await connection.promise().query('SELECT libros.Titulo,libros.Autor,libros.Descripción,Portadas.nombre_imagen FROM `libros` INNER JOIN Portadas ON Portadas.ISBN = libros.ISBN');
+        const [rows] = await connection.promise().query('SELECT libros.ISBN,Portadas.nombre_imagen FROM `libros` INNER JOIN Portadas ON Portadas.ISBN = libros.ISBN');
+
+        connection.end();
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron libros' });
+        }
+        return res.status(200).json({ message: 'Libros encontrados', libros: rows });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+const getLibroID = async (req, res) => {
+    try {
+        const connection = await createConnection();
+        //const [rows] = await connection.promise().query('SELECT * FROM libros');
+        const [rows] = await connection.promise().query('SELECT S.*,Portadas.nombre_imagen FROM ((SELECT * FROM libros WHERE ISBN = ?) AS S INNER JOIN Portadas ON Portadas.ISBN = S.ISBN)', [req.params.id]);
 
         connection.end();
 
@@ -61,5 +78,6 @@ const addLibro = async (req, res) => {
 export const methods = {
     getLibrosTitulo,
     addLibro,
-    getLibros
+    getLibros,
+    getLibroID
 };
