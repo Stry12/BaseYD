@@ -22,6 +22,7 @@ const fileUpload = multer({
 const router = Router();
 
 router.get("/titulos/:text",librosMethods.getLibrosTitulo);
+router.get("/getlibros",librosMethods.getLibros);
 router.post("/subir",fileUpload,librosMethods.addLibro);
 
 export default router;
