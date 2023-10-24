@@ -4,11 +4,15 @@ import path from 'path';
 import morgan from 'morgan';
 import express from 'express';
 import value from './const/conts.js';
-import bodyParser from 'body-parser';
+import url from 'url';
+
 //archivo de la confiraciaona de bd 
 import './database/connection.js'
 
 const App = express(); //crear instancia app
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /* The `corsOptions` object is a configuration object for the CORS (Cross-Origin Resource Sharing)
 middleware. CORS is a mechanism that allows resources (e.g., fonts, JavaScript, etc.) on a web page
@@ -44,7 +48,7 @@ App.use(express.json())
 
 //static folder
 App.use(express.static(path.join(path.resolve(), value.STATIC_PATH)));
-
+App.use('/imagenes/portadas', express.static(path.join(__dirname, 'imagenes', 'portadas')));
 
 //ENDPOINTs
 import routerUser from './routes/user.js';

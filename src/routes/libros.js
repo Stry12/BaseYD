@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const diskStorage = multer.diskStorage({
     destination: path.join(__dirname, '../imagenes/portadas'),
     filename: (req, file, cb) => {
-        cb(null, Date.now() + "-portada-" + path.extname(file.originalname));
+        cb(null, Date.now() + "-portada-" + file.originalname);
     }
 });
 
@@ -22,6 +22,8 @@ const fileUpload = multer({
 const router = Router();
 
 router.get("/titulos/:text",librosMethods.getLibrosTitulo);
+router.get("/getlibros",librosMethods.getLibros);
+router.get("/getlibrosid/:id",librosMethods.getLibroID);
 router.post("/subir",fileUpload,librosMethods.addLibro);
 
 export default router;
