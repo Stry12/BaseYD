@@ -1,10 +1,10 @@
 import mysql2 from 'mysql2';
 import connectionConfig from '../database/connection.js';
+import bcrypt from 'bcrypt';
 
 const createConnection = async () => {
   return mysql2.createConnection(connectionConfig);
 };
-
 
 const existeEmail = async (req, res) => {
   try {
@@ -47,13 +47,16 @@ const setUser = async (req, res) => {
     // Si el correo no existe, proceder con la inserción
     const { name, email, password } = req.body;
 
+    // Hashear la contraseña antes de almacenarla
+    const hashedPassword = await bcrypt.hash(password, 10); // Número de rondas de hashing
+
     // Realiza la inserción en la base de datos
     const [result] = await connection
       .promise()
       .query('INSERT INTO usuarios (NombreDeUsuario, CorreoElectronico, Contraseña) VALUES (?, ?, ?)', [
         name,
         email,
-        password
+        hashedPassword
       ]);
 
     connection.end();
@@ -68,6 +71,7 @@ const setUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 export const RegisterMethods = {
   setUser,
