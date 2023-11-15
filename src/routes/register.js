@@ -4,10 +4,10 @@ import { fileURLToPath } from 'url'; // Importa la función fileURLToPath para t
 import path from 'path';
 import multer from 'multer';
 
-
-
 const router = Router();
 
 router.post('/setuser',RegisterMethods.setUser);
 
 export default router
+
+
