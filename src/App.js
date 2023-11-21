@@ -53,7 +53,6 @@ App.use('/imagenes/portadas', express.static(path.join(__dirname, 'imagenes', 'p
 //ENDPOINTs
 import routerUser from './routes/user.js';
 import routerLibros from './routes/libros.js';
-import routerRegister from './routes/register.js';
 import prueba from './routes/pruebaconsultas.js';
 
 /* `app.use('/user', routerUser)` is setting up a middleware for the Express.js application. It
@@ -61,7 +60,6 @@ specifies that any requests with a URL starting with '/user' should be handled b
 router. */
 App.use('/user', routerUser);
 App.use('/libros', routerLibros);
-App.use('/register',routerRegister);
 App.use('/consulta',prueba);
 
 
