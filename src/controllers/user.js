@@ -6,13 +6,6 @@ const createConnection = async () => {
   return mysql2.createConnection(connectionConfig);
 }
 
-const connection = await mysql2.createConnection({
-    host: connectionConfig.host,
-    user: connectionConfig.user,
-    password: connectionConfig.password,
-    database: connectionConfig.database
-});
-
 
 const existeEmail = async (req, res) => {
     try {
@@ -36,6 +29,7 @@ const existeEmail = async (req, res) => {
 };
   
 const setUser = async (req, res) => {
+    console.log(req.body);
     try {
       console.log(req.body);
       const connection = await createConnection();
@@ -56,8 +50,12 @@ const setUser = async (req, res) => {
       const { name, email, password } = req.body;
   
       // Hashear la contraseña antes de almacenarla
-      const hashedPassword = await bcrypt.hash(password, 10); // Número de rondas de hashing
-  
+      const plainPassword = password;
+      const saltRounds = 10; // Número de rondas para el algoritmo de hash (mayor número, mayor seguridad)
+      
+      hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+
+      
       // Realiza la inserción en la base de datos
       const [result] = await connection
         .promise()
@@ -77,25 +75,24 @@ const setUser = async (req, res) => {
       }
     } catch (error) {
       return res.status(500).json({ message: error.message });
+      connection.end();
     }
 };
 
 const getCuenta = async (req, res) => {
   try {
     const connection = await createConnection();
-    const { NombreDeUsuario, Contraseña } = req.body;
+    const { NombreDeUsuario, password } = req.body;
 
     // Buscar al usuario en la base de datos por nombre de usuario
     const [rows] = await connection.promise().query('SELECT * FROM usuarios WHERE NombreDeUsuario = ?', [
       NombreDeUsuario,
     ]);
-
+    console.log(req.body);
     if (rows.length > 0) {
-      // Usuario encontrado
-      const usuario = rows[0];
-
       // Comparar la contraseña proporcionada con la almacenada en la base de datos
-      const contraseñaCorrecta = await bcrypt.compare(Contraseña, usuario.Contraseña);
+
+      const contraseñaCorrecta = await bcrypt.compare(password, rows[0].Contraseña);
 
       if (contraseñaCorrecta) {
         // Las credenciales son correctas
