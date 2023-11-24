@@ -2,13 +2,12 @@ POST http://localhost:4000/libros/create/nosql
 Content-Type: application/json
 
 {
-  "ISBN": "1234567890",
-  "Titulo": "El libro de prueba",
-  "Autor": "Autor de prueba",
-  "Categoria": "Ficción",
-  "Descripción": "Una breve descripción del libro de prueba.",
-  "imagen": ["imagen1.jpg", "imagen2.jpg"],
-  "timestamp": "2023-11-23T12:00:00.000Z"
+  "isbn": "12345678901",
+  "titulo": "El libro de prueba1",
+  "autor": "Autor de prueba1",
+  "categoria": "Ficción1",
+  "descripción": "1Una breve descripción del libro de prueba.",
+  "imagen": ["imagen1.jpg", "imagen2.jpg"]
 }
 
 

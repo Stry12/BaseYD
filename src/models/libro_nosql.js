@@ -2,25 +2,25 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const libroSchema = new Schema({
-    ISBN: {
+    isbn: {
         type: String,
         required: true,
         unique: true
     },
-    Titulo: {
+    titulo: {
         type: String,
         required: true,
         unique: false
     },
-    Autor: {
+    autor: {
         type: String,
         required: true
     },
-    Categoria: {
+    categoria: {
         type: String,
         required: true
     },
-    Descripción: {
+    descripción: {
         type: String,
         required: true
     },
