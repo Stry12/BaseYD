@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import values from '../const/conts.js';
 
-mongoose.connect(values.URI_MONGO, {}).catch(err => {
+const uriMongolocal = values.URI_MONGO;
+
+mongoose.connect(uriMongolocal).catch(err => {
     console.error("Error de conexión: ", err);
 });
 

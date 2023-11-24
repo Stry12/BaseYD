@@ -3,8 +3,8 @@ import values from "../const/conts.js";
 
 const sequelize = new Sequelize(
     values.DATABASE,
-    "root",
-    "",
+    values.USER,
+    values.PASSWORD,
     {
         host: values.HOST,
         dialect: "mysql",

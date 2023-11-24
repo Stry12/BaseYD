@@ -13,6 +13,7 @@ const URI_MONGO = process.env.URI_MONGO;
 const HOST = process.env.HOST;
 const USER = process.env.USER;
 const DATABASE = process.env.DATABASE;
+const PASSWORD = process.env.PASSWORD;
 
 
 /* The code is creating an object called `object` and assigning it the values of the constants

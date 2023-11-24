@@ -1,5 +1,5 @@
 import mysql2 from 'mysql2';
-import connectionConfig from '../database/connection.js';
+import connectionConfig from '../../database/connection.js';
 
 const createConnection = async () => {
     return mysql2.createConnection(connectionConfig);
@@ -56,19 +56,21 @@ const getLibroID = async (req, res) => {
     }
 }
 
-const addLibro = async (req, res) => {
+const addLibro = async (req, res, next) => {
     try {
-        // Verifica si se ha subido un archivo
-        if (!req.file) {
-            return res.status(400).json({ message: 'No se ha subido un archivo de portada.' });
-        }
 
-        const connection = await createConnection();
-        const [rows] = await connection.promise().query('INSERT INTO libros (ISBN ,Titulo, Autor, Descripción, Categoria) VALUES (? ,?, ?, ?, ?)', [req.body.isbn,req.body.title, req.body.author, req.body.synopsis, req.body.category]);
-        const [rows2] = await connection.promise().query('INSERT INTO Portadas (nombre_imagen, ISBN, ruta, extension) VALUES (?, ?, ?, ?)', [req.file.filename, req.body.isbn,req.file.destination, req.file.mimetype]);
-        connection.end();      
-        console.log('Libro agregado con éxito.');
-        return res.status(200).json({ message: 'Información de la imagen recibida con éxito.' });
+        const bdSelection = req.params.typeBd;
+
+        if(bdSelection === 'sql'){
+            const { ISBN, Titulo, Autor, Categoria, Descripcion } = req.body;
+            const connection = await createConnection();
+            const [rows] = await connection.promise().query('INSERT INTO libros (ISBN,Titulo,Autor,Categoria,Descripcion) VALUES (?, ?, ?, ?, ?)', [ISBN, Titulo, Autor, Categoria, Descripcion]);
+            connection.end();
+            console.log(rows);
+            res.status(200).json({ message: 'Libro creado', libro: rows });
+        };
+
+        next();
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
