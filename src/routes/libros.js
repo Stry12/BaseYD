@@ -28,6 +28,6 @@ router.get("/getlibrosid/:id",librosMethods.getLibroID);
 router.post("/subir",fileUpload,librosMethods.addLibro);
 router.get("/librosisbnauthor",librosMethods.getLibrosIsbn)
 
-router.route('/create/:typeBd').post(librosMethods.getLibrosTitulo , noSqlLibros.createLibro);
+router.route('/create/:typeBd').post(librosMethods.addLibro , noSqlLibros.createLibro);
 
 export default router;
