@@ -1,6 +1,7 @@
 import connectionConfig from '../database/connection.js';
 import mysql2 from 'mysql2';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const createConnection = async () => {
   return mysql2.createConnection(connectionConfig);
@@ -53,7 +54,7 @@ const setUser = async (req, res) => {
       const plainPassword = password;
       const saltRounds = 10; // Número de rondas para el algoritmo de hash (mayor número, mayor seguridad)
       
-      hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+      const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
 
       
       // Realiza la inserción en la base de datos
@@ -75,6 +76,7 @@ const setUser = async (req, res) => {
       }
     } catch (error) {
       return res.status(500).json({ message: error.message });
+
       connection.end();
     }
 };
@@ -88,15 +90,27 @@ const getCuenta = async (req, res) => {
     const [rows] = await connection.promise().query('SELECT * FROM usuarios WHERE NombreDeUsuario = ?', [
       NombreDeUsuario,
     ]);
-    console.log(req.body);
+
     if (rows.length > 0) {
       // Comparar la contraseña proporcionada con la almacenada en la base de datos
-
       const contraseñaCorrecta = await bcrypt.compare(password, rows[0].Contraseña);
 
+      console.log("consolee:",rows[0].Contraseña);
+      console.log("Contraseña:",password);
+      console.log("contraseñaCorrecta",contraseñaCorrecta);
+
+
       if (contraseñaCorrecta) {
+
+        const UserForToken = {
+          id: rows[0].ID,
+          username: rows[0].NombreDeUsuario,
+        };
+        const token = jwt.sign(userForToken, 'salvador');
+
         // Las credenciales son correctas
         res.status(200).json({ message: 'Inicio de sesión exitoso' });
+          
       } else {
         // La contraseña es incorrecta
         res.status(401).json({ error: 'Credenciales incorrectas' });
