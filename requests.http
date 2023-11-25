@@ -1,13 +1,18 @@
-POST http://localhost:4000/libros/create/nosql
+GET http://localhost:4000/libros/get/nosql HTTP/1.1
+
+###
+POST http://localhost:4000/libros/create/nosql HTTP/1.1
 Content-Type: application/json
 
 {
-  "isbn": "12345678901",
-  "titulo": "El libro de prueba1",
-  "autor": "Autor de prueba1",
-  "categoria": "Ficción1",
-  "descripción": "1Una breve descripción del libro de prueba.",
+  "isbn": "12312312313233",
+  "titulo": "El libro de prueba1334",
+  "autor": "Autor de prueba3134",
+  "categoria": "Ficción313",
+  "descripción": "1Una breve descripción del libro de prueba.34",
   "imagen": ["imagen1.jpg", "imagen2.jpg"]
 }
 
+###
 
+GET http://localhost:4000/libros/get/nosql/123456789031 HTTP/1.1

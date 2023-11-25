@@ -22,25 +22,31 @@ const getLibrosTitulo = async (req, res) => {
     }
 }
 
-const getLibros = async (req, res) => {
+const getLibros = async (req, res, next) => {
     try {
-        const connection = await createConnection();
-        //const [rows] = await connection.promise().query('SELECT * FROM libros');
-        const [rows] = await connection.promise().query('SELECT libros.ISBN,Portadas.nombre_imagen FROM `libros` INNER JOIN Portadas ON Portadas.ISBN = libros.ISBN');
+        const bdSelection = req.params.typeBd;
+        if(bdSelection === 'sql'){
+            const connection = await createConnection();
+            //const [rows] = await connection.promise().query('SELECT * FROM libros');
+            const [rows] = await connection.promise().query('SELECT libros.ISBN,Portadas.nombre_imagen FROM `libros` INNER JOIN Portadas ON Portadas.ISBN = libros.ISBN');
 
-        connection.end();
+            connection.end();
 
-        if (rows.length === 0) {
-            return res.status(404).json({ message: 'No se encontraron libros' });
+            if (rows.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron libros' });
+            }
+            return res.status(200).json({ message: 'Libros encontrados', libros: rows });
         }
-        return res.status(200).json({ message: 'Libros encontrados', libros: rows });
+        next();
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 }
 
-const getLibroID = async (req, res) => {
+const getLibroID = async (req, res, next) => {
     try {
+        const bdSelection = req.params.typeBd;
+        if(bdSelection === 'sql'){
         const connection = await createConnection();
         //const [rows] = await connection.promise().query('SELECT * FROM libros');
         const [rows] = await connection.promise().query('SELECT S.*,Portadas.nombre_imagen FROM ((SELECT * FROM libros WHERE ISBN = ?) AS S INNER JOIN Portadas ON Portadas.ISBN = S.ISBN)', [req.params.id]);
@@ -51,6 +57,8 @@ const getLibroID = async (req, res) => {
             return res.status(404).json({ message: 'No se encontraron libros' });
         }
         return res.status(200).json({ message: 'Libros encontrados', libros: rows });
+        }
+        next();
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -60,7 +68,7 @@ const addLibro = async (req, res, next) => {
     try {
 
         const bdSelection = req.params.typeBd;
-
+        console.log(bdSelection);
         if(bdSelection === 'sql'){
             const { ISBN, Titulo, Autor, Categoria, Descripcion } = req.body;
             const connection = await createConnection();
