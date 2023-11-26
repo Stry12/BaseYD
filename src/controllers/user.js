@@ -115,34 +115,39 @@ const getCuenta = async (req, res) => {
       const contraseñaCorrecta = await bcrypt.compare(password, rows[0].Contraseña);
 
       if (contraseñaCorrecta) {
-
         const UserForToken = {
           id: rows[0].ID,
           username: rows[0].NombreDeUsuario,
         };
-        const token = jwt.sign(UserForToken, 'salvador', {expiresIn: '1m'});
+
+        const token = jwt.sign(UserForToken, 'salvador', { expiresIn: '1m' });
+
         const [updateResult] = await connection
-        .promise()
-        .query('UPDATE usuarios SET Token = ?, ExpiracionToken = ? WHERE ID = ?', [
-          token,
-          new Date(Date.now() + 60), // Expire in 1 min
-          rows[0].ID,
-      ]);
-      
+          .promise()
+          .query('UPDATE usuarios SET Token = ?, ExpiracionToken = ? WHERE ID = ?', [
+            token,
+            new Date(Date.now() + 60), // Expira en 1 minuto
+            rows[0].ID,
+          ]);
+
         // Verificar si la actualización fue exitosa
         console.log('Update Result:', updateResult);
 
         // Las credenciales son correctas
-        res.status(200).json({ message: 'Inicio de sesión exitoso' });
+        res.status(200).json({
+          message: 'Inicio de sesión exitoso',
+          userID: rows[0].ID, // Incluir el ID del usuario en la respuesta
+          token: token,
+        });
+
         console.log(token);
-          
       } else {
         // La contraseña es incorrecta
         res.status(401).json({ error: 'Credenciales incorrectas' });
       }
     } else {
       // El usuario no existe
-      res.status(404).json({ error: 'Usuario no encontrado'});
+      res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
     connection.end();
@@ -151,6 +156,27 @@ const getCuenta = async (req, res) => {
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
+
+const informacionPerfil = async (req, res) => {
+  try {
+    const connection = await createConnection();
+
+    const [rows] = await connection
+      .promise()
+      .query('SELECT NombreDeUsuario, CorreoElectronico FROM usuarios WHERE ID = ?', [
+        req.params.id,
+      ]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    return res.status(200).json({ message: 'Información de perfil', usuario: rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
 
 const verificarToken = (req, res, next) => {
   const token = req.headers.authorization;
@@ -181,4 +207,5 @@ export default {
   getCuenta,
   existeEmail,
   verificarToken,
+  informacionPerfil
 }

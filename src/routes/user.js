@@ -7,4 +7,5 @@ const router = Router();
 router.post("/registro",userMethods.registro);
 router.post("/setuser", userMethods.setUser)
 router.post("/getuser",userMethods.getCuenta,userMethods.verificarToken)
+router.get("/getinfo/:id",userMethods.informacionPerfil);
 export default router;
