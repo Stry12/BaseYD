@@ -175,7 +175,7 @@ const verificarToken = (req, res, next) => {
 };
 
 
-export {
+export default {
   registro,
   setUser,
   getCuenta,
