@@ -3,9 +3,7 @@ import {methods as userMethods} from '../controllers/user.js';
 
 const router = Router();
 
-router.get("/",userMethods.getLibros);
-router.get("/libros",userMethods.getLibros);
-router.get("/general/:id",userMethods.getGeneral);
-
+//Jorge
+router.post("/registro",userMethods.registro);
 
 export default router;
