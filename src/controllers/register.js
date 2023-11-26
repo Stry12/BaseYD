@@ -24,7 +24,7 @@ const setUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     // Hash de la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 4);
 
     // Realiza la inserción en la base de datos
     const [result] = await connection

@@ -95,21 +95,27 @@ const getCuenta = async (req, res) => {
       // Comparar la contraseña proporcionada con la almacenada en la base de datos
       const contraseñaCorrecta = await bcrypt.compare(password, rows[0].Contraseña);
 
-      console.log("consolee:",rows[0].Contraseña);
-      console.log("Contraseña:",password);
-      console.log("contraseñaCorrecta",contraseñaCorrecta);
-
-
       if (contraseñaCorrecta) {
 
         const UserForToken = {
           id: rows[0].ID,
           username: rows[0].NombreDeUsuario,
         };
-        const token = jwt.sign(userForToken, 'salvador');
+        const token = jwt.sign(UserForToken, 'salvador', {expiresIn: '1m'});
+        const [updateResult] = await connection
+        .promise()
+        .query('UPDATE usuarios SET Token = ?, ExpiracionToken = ? WHERE ID = ?', [
+          token,
+          new Date(Date.now() + 60), // Expire in 1 min
+          rows[0].ID,
+      ]);
+      
+        // Verificar si la actualización fue exitosa
+        console.log('Update Result:', updateResult);
 
         // Las credenciales son correctas
         res.status(200).json({ message: 'Inicio de sesión exitoso' });
+        console.log(token);
           
       } else {
         // La contraseña es incorrecta
@@ -127,8 +133,32 @@ const getCuenta = async (req, res) => {
   }
 };
 
+const verificarToken = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Acceso no autorizado. Token no proporcionado.' });
+  }
+
+  jwt.verify(token.replace('Bearer ', ''), 'salvador', (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ error: 'Acceso no autorizado. Token inválido.' });
+    }
+
+    // Verifica si el token ha expirado
+    if (new Date() > new Date(decoded.exp * 1000)) {
+      return res.status(401).json({ error: 'Acceso no autorizado. Token expirado.' });
+    }
+
+    req.usuario = decoded; // Agrega la información del usuario a la solicitud
+    next();
+  });
+};
+
+
 export {
   setUser,
   getCuenta,
   existeEmail,
+  verificarToken,
 }
