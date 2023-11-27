@@ -23,6 +23,6 @@ const router = Router();
 router.post('/subir', fileUpload, noSqlPublicaciones.createPublicacion);
 router.get('/get', noSqlPublicaciones.getPublicaciones);
 router.get('/get/:id', noSqlPublicaciones.getPublicacionesid)
-
+router.delete('/delete/:id', noSqlPublicaciones.deletePublicacion);
 
 export default router;

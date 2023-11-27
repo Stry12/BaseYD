@@ -41,6 +41,13 @@ noSqlPublicaciones.getPublicacionesid = async (req, res) => {
     }
 }
 
-
+noSqlPublicaciones.deletePublicacion = async (req, res) => {
+    try {
+        const publicacion = await PublicacionesModel.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Publicacion eliminada', publicacion: publicacion });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    };
+}
 
 export default noSqlPublicaciones;

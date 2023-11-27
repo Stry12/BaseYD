@@ -33,3 +33,7 @@ GET http://localhost:4000/publicaciones/get/13 HTTP/1.1
 
 ###
 Get http://localhost:4000/libros/get/librosisbnauthor HTTP/1.1
+
+###
+
+DELETE http://localhost:4000/libros/delete/12312312313233 HTTP/1.1
