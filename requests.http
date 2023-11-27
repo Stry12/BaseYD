@@ -15,6 +15,10 @@ Content-Type: application/json
 
 ###
 
+GET http://localhost:4000/libros/get/nosql/3 HTTP/1.1
+
+###
+
 GET http://localhost:4000/libros/get/nosql/123456789031 HTTP/1.1
 
 ###
