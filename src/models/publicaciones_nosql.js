@@ -2,30 +2,29 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const publicacionSchema = new Schema({
-    id_publicacion: {
-        type: String,
-        required: true,
-        unique: true
-    },
     id_usuario: {
         type: String,
         required: true,
         unique: false
     },
-    estado: {
+    condition: {
         type: String,
         required: true
     },
     editorial: {
         type: String,
-        required: true
+        required: false
     },
     ubicacion: {
         type: String,
-        required: true
+        required: false
     },
-    fotos:{
+    images:{
         type: Array,
+        required: false
+    },
+    isbn: {
+        type: String,
         required: false
     },
 }, {
@@ -34,4 +33,4 @@ const publicacionSchema = new Schema({
     }
 });
 
-export default model('Publicacion', publicacionSchema);
+export default model('Publicacion', publicacionSchema, 'publicaciones');
