@@ -7,25 +7,25 @@ const libroSchema = new Schema({
         required: true,
         unique: true
     },
-    titulo: {
+    title: {
         type: String,
         required: true,
         unique: false
     },
-    autor: {
+    author: {
         type: String,
         required: true
     },
-    categoria: {
+    category: {
         type: String,
         required: true
     },
-    descripción: {
+    synopsis: {
         type: String,
-        required: true
+        required: false
     },
-    imagen: {
-        type: Array,
+    coverImage: {
+        type: String,
         required: true
     }
 }, {
