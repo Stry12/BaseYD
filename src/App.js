@@ -50,7 +50,7 @@ App.use(express.json())
 //static folder
 App.use(express.static(path.join(path.resolve(), value.STATIC_PATH)));
 App.use('/imagenes/portadas', express.static(path.join(__dirname, 'imagenes', 'portadas')));
-
+App.use('/imagenes/publicaciones', express.static(path.join(__dirname, 'imagenes', 'publicaciones')));
 //ENDPOINTs
 import routerUser from './routes/user.js';
 import routerLibros from './routes/libros.js';

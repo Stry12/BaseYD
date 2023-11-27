@@ -26,7 +26,7 @@ router.get("/titulos/:text",librosMethods.getLibrosTitulo);
 router.get("/getlibros",librosMethods.getLibros);
 router.get("/getlibrosid/:id",librosMethods.getLibroID);
 router.post("/subir",fileUpload,librosMethods.addLibro);
-router.get("/librosisbnauthor",librosMethods.getLibrosIsbn)
+router.get("/get/librosisbnauthor",noSqlLibros.getISBNautor)
 
 router.route('/create/:typeBd').post(fileUpload,librosMethods.addLibro , noSqlLibros.createLibro);
 router.route('/get/:typeBd').get(librosMethods.getLibros , noSqlLibros.getLibros);

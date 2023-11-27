@@ -38,4 +38,13 @@ noSqlLibros.getLibro = async (req, res) => {
     };
 }
 
+noSqlLibros.getISBNautor = async (req, res) => {
+    try {
+        const libro = await LibroModel.find({},"author isbn title images");
+        res.status(200).json({ message: 'Libro encontrado', libro: libro });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    };
+}
+
 export default noSqlLibros;

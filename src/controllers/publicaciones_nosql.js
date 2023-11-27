@@ -34,7 +34,7 @@ noSqlPublicaciones.getPublicaciones = async (req, res) => {
 
 noSqlPublicaciones.getPublicacionesid = async (req, res) => {
     try {
-        const publicaciones = await PublicacionesModel.find({"id_usuario": req.params.id});
+        const publicaciones = await PublicacionesModel.find({"id_usuario": req.params.id}, "title condition images isbn _id");
         res.status(200).json(publicaciones);
     } catch (error) {
         return res.status(500).json({ message: error.message });

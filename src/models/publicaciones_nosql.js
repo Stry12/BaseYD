@@ -7,6 +7,11 @@ const publicacionSchema = new Schema({
         required: true,
         unique: false
     },
+    title: {
+        type: String,
+        required: true,
+        unique: false
+    },
     condition: {
         type: String,
         required: true
