@@ -5,11 +5,8 @@ const noSqlLibros = {};
 noSqlLibros.createLibro = async (req, res) => {
     
     try {
-        console.log("hola");
         const rutaCompleta = req.file.path; // C:\Users\Salvador\OneDrive - alumnos.uv.cl\Documentos\GitHub\BaseYD\src\imagenes\portadas\1701060375379-portada-Ver_datos_2-5.png
-
         const nombreArchivo = path.basename(rutaCompleta);
-        
         // Usar el nombre del archivo como sea necesario
         req.body.coverImage = nombreArchivo;
         const libro = new LibroModel(req.body);
